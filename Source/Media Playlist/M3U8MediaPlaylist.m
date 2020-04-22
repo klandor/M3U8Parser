@@ -75,6 +75,8 @@
     
     M3U8LineReader* lines = [[M3U8LineReader alloc] initWithText:self.originalText];
     M3U8ExtXKey *key = nil;
+
+    BOOL foundFreshIsComing = NO;
     
     while (true) {
         
@@ -96,9 +98,13 @@
             line = [line stringByReplacingOccurrencesOfString:M3U8_EXT_X_KEY withString:@""];
             key = [[M3U8ExtXKey alloc] initWithDictionary:line.attributesFromAssignment];
         }
+
+        if ([line hasPrefix:@"#EXT-X-FRESH-IS-COMING"]) {
+            foundFreshIsComing = YES;
+        }
         
         //check if it's #EXTINF:
-        if ([line hasPrefix:M3U8_EXTINF])
+        if (foundFreshIsComing && [line hasPrefix:M3U8_EXTINF])
         {
             line = [line stringByReplacingOccurrencesOfString:M3U8_EXTINF withString:@""];
             line = [line stringByReplacingOccurrencesOfString:@"," withString:@""];
