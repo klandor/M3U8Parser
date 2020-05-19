@@ -75,8 +75,6 @@
     
     M3U8LineReader* lines = [[M3U8LineReader alloc] initWithText:self.originalText];
     M3U8ExtXKey *key = nil;
-
-    BOOL foundFreshIsComing = NO;
     
     while (true) {
         
@@ -100,11 +98,12 @@
         }
 
         if ([line hasPrefix:@"#EXT-X-FRESH-IS-COMING"]) {
-            foundFreshIsComing = YES;
+            // abandam segements before the one marked as "IS-COMING"
+            self.segmentList = [[M3U8SegmentInfoList alloc] init];
         }
         
         //check if it's #EXTINF:
-        if (foundFreshIsComing && [line hasPrefix:M3U8_EXTINF])
+        if ([line hasPrefix:M3U8_EXTINF])
         {
             line = [line stringByReplacingOccurrencesOfString:M3U8_EXTINF withString:@""];
             line = [line stringByReplacingOccurrencesOfString:@"," withString:@""];
