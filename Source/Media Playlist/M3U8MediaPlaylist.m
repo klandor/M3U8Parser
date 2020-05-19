@@ -75,6 +75,8 @@
     
     M3U8LineReader* lines = [[M3U8LineReader alloc] initWithText:self.originalText];
     M3U8ExtXKey *key = nil;
+
+    BOOL foundFreshIsComing = NO;
     
     while (true) {
         
@@ -97,8 +99,9 @@
             key = [[M3U8ExtXKey alloc] initWithDictionary:line.attributesFromAssignment];
         }
 
-        if ([line hasPrefix:@"#EXT-X-FRESH-IS-COMING"]) {
-            // abandam segements before the one marked as "IS-COMING"
+        if ([line hasPrefix:@"#EXT-X-FRESH-IS-COMING"] && !foundFreshIsComing) {
+            foundFreshIsComing = YES;
+            // abandam segements before the ones marked as "IS-COMING"
             self.segmentList = [[M3U8SegmentInfoList alloc] init];
         }
         
