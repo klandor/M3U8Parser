@@ -99,10 +99,8 @@
             key = [[M3U8ExtXKey alloc] initWithDictionary:line.attributesFromAssignment];
         }
 
-        if ([line hasPrefix:@"#EXT-X-FRESH-IS-COMING"] && !foundFreshIsComing) {
+        if ([line hasPrefix:M3U8_EXT_X_FRESH_IS_COMING]) {
             foundFreshIsComing = YES;
-            // abandam segements before the ones marked as "IS-COMING"
-            self.segmentList = [[M3U8SegmentInfoList alloc] init];
         }
         
         //check if it's #EXTINF:
@@ -115,6 +113,11 @@
             //then get URI
             NSString *nextLine = [lines next];
             [params setValue:nextLine forKey:M3U8_EXTINF_URI];
+            
+            if (foundFreshIsComing) {
+                [params setValue:@YES forKey:M3U8_EXT_X_FRESH_IS_COMING];
+                foundFreshIsComing = NO;
+            }
             
             M3U8SegmentInfo *segment = [[M3U8SegmentInfo alloc] initWithDictionary:params xKey:key];
             if (segment) {

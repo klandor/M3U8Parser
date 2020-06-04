@@ -28,6 +28,7 @@
 
 @property (readonly, nonatomic) NSTimeInterval duration;
 @property (readonly, nonatomic, copy) NSURL *URI;
+@property (readonly, nonatomic) BOOL isFreshIsComing;
 /** Key for media data decrytion. may be for this segment or next if no key. */
 @property (readonly, readonly, nonatomic) M3U8ExtXKey *xKey;
 

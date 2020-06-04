@@ -28,6 +28,13 @@
 #define M3U8_EXTINF_TITLE                   @"TITLE"
 #define M3U8_EXTINF_URI                     @"URI"
 
+/**
+@format  #EXT-X-FRESH-IS-COMING
+
+@note The EXT-X-FRESH-IS-COMING tag appears only before #EXTINF.
+*/
+
+#define M3U8_EXT_X_FRESH_IS_COMING          @"#EXT-X-FRESH-IS-COMING"
 
 /// NEW TAGS
 /**

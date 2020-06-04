@@ -59,6 +59,10 @@
     return [NSURL URLWithString:self.dictionary[M3U8_EXTINF_URI]];
 }
 
+- (BOOL)isFreshIsComing {
+    return [self.dictionary[M3U8_EXT_X_FRESH_IS_COMING] boolValue];
+}
+
 - (NSString *)description {
     NSMutableDictionary *dict = [self.dictionary mutableCopy];
     [dict addEntriesFromDictionary:[self.xKey valueForKey:@"dictionary"]];
