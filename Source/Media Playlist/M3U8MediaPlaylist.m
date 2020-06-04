@@ -75,6 +75,8 @@
     
     M3U8LineReader* lines = [[M3U8LineReader alloc] initWithText:self.originalText];
     M3U8ExtXKey *key = nil;
+    
+    NSInteger sequence = -1;
 
     BOOL foundFreshIsComing = NO;
     
@@ -92,6 +94,12 @@
         
         if (self.baseURL) {
             [params setObject:self.baseURL forKey:M3U8_BASE_URL];
+        }
+        
+        if ([line hasPrefix:M3U8_EXT_X_MEDIA_SEQUENCE]) {
+            line = [line stringByReplacingOccurrencesOfString:M3U8_EXT_X_MEDIA_SEQUENCE withString:@""];
+            sequence = line.integerValue;
+            continue;
         }
         
         if ([line hasPrefix:M3U8_EXT_X_KEY]) {
@@ -113,6 +121,11 @@
             //then get URI
             NSString *nextLine = [lines next];
             [params setValue:nextLine forKey:M3U8_EXTINF_URI];
+            
+            if (sequence >= 0) {
+                [params setValue:@(sequence) forKey:M3U8_EXTINF_SEQUENCE];
+                sequence++;
+            }
             
             if (foundFreshIsComing) {
                 [params setValue:@YES forKey:M3U8_EXT_X_FRESH_IS_COMING];
